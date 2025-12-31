@@ -946,8 +946,8 @@ class GoveeShell:
                mappings create --device-id <id> [--universe <num>] --channel <num> --length <num>
                mappings delete <id>
                mappings channel-map
-        Templates (multi-channel): rgb, rgbw, brightness_rgb, rgbwa, rgbaw, brgbwct
-        Fields (single-channel): power [all], brightness [caps], r/red [caps], g/green [caps], b/blue [caps], w/white [caps], ct/color_temp [caps]
+        Templates (multi-channel): RGB, RGBCT, DimRGBCT, DimCT
+        Fields (single-channel): power [all], dimmer [caps], r/red [caps], g/green [caps], b/blue [caps], ct/color_temp [caps]
         Note: --universe defaults to 0; [caps] = requires device capability check
         Use 'help mappings create', 'mappings create --help', or 'mappings create ?' for detailed creation help
         """
@@ -1294,8 +1294,8 @@ class GoveeShell:
             self._append_output("  3. [bold]mappings list[/] - View current channel-to-device mappings\n")
             self._append_output("     [dim]Shows which channels control which device fields[/]\n")
             self._append_output("  4. [bold]mappings create[/] - Create new channel mappings\n")
-            self._append_output("     [dim]Use --template (rgb, rgbw, brightness_rgb, etc.)[/]\n")
-            self._append_output("     [dim]Example: mappings create --device-id AA:BB:CC:DD:EE:FF --template rgb --start-channel 1[/]\n")
+            self._append_output("     [dim]Use --template (RGB, RGBCT, DimRGBCT, DimCT)[/]\n")
+            self._append_output("     [dim]Example: mappings create --device-id AA:BB:CC:DD:EE:FF --template RGB --start-channel 1[/]\n")
             self._append_output("     [dim]Type 'mappings create --help' for detailed options[/]\n")
         elif intro:
             self._append_output(f"[bold cyan]{intro}[/]\n\n")
