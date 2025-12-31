@@ -142,4 +142,91 @@ class KeyBindingManager:
                 self.shell.watch_controller.set_interval(new_interval)
                 event.app.invalidate()
 
+        # Log view mode keybindings
+        @kb.add('escape', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle Escape in log view mode - exit to normal view."""
+            asyncio.create_task(self.shell._exit_log_view_mode())
+
+        @kb.add('q', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle 'q' in log view mode - exit to normal view."""
+            asyncio.create_task(self.shell._exit_log_view_mode())
+
+        @kb.add('pageup', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle Page Up in log view mode - previous page."""
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.navigate_page("prev")
+                asyncio.create_task(self.shell.log_view_controller.refresh())
+
+        @kb.add('pagedown', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle Page Down in log view mode - next page."""
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.navigate_page("next")
+                asyncio.create_task(self.shell.log_view_controller.refresh())
+
+        @kb.add('home', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle Home in log view mode - first page."""
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.navigate_page("first")
+                asyncio.create_task(self.shell.log_view_controller.refresh())
+
+        @kb.add('end', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle End in log view mode - last page."""
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.navigate_page("last")
+                asyncio.create_task(self.shell.log_view_controller.refresh())
+
+        @kb.add('l', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle 'l' in log view mode - cycle log level filter."""
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.cycle_level_filter()
+                asyncio.create_task(self.shell.log_view_controller.refresh())
+
+        @kb.add('c', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle 'c' in log view mode - clear logger filter."""
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.set_logger_filter(None)
+                asyncio.create_task(self.shell.log_view_controller.refresh())
+
+        @kb.add('r', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle 'r' in log view mode - manual refresh."""
+            if self.shell.log_view_controller:
+                asyncio.create_task(self.shell.log_view_controller.refresh())
+
+        @kb.add('space', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle Space in log view mode - toggle follow mode."""
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.toggle_follow_mode()
+                asyncio.create_task(self.shell.log_view_controller.refresh())
+
+        @kb.add('f', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle 'f' in log view mode - set logger filter (modal prompt)."""
+            # TODO: Implement modal input dialog for logger filter
+            # For now, show placeholder message
+            pass
+
+        @kb.add('/', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle '/' in log view mode - edit search pattern (modal prompt)."""
+            # TODO: Implement modal input dialog for search pattern
+            # For now, show placeholder message
+            pass
+
+        @kb.add('?', filter=Condition(lambda: self.shell.in_log_view_mode))
+        def _(event):
+            """Handle '?' in log view mode - show help modal."""
+            # TODO: Implement help modal
+            # For now, show placeholder message
+            pass
+
         return kb
