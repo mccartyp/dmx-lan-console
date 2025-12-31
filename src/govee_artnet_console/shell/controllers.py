@@ -914,12 +914,12 @@ class LogViewController:
         available_width = max(40, terminal_width - border_overhead)
 
         # Allocate remaining width proportionally
-        logger_width = max(15, int(available_width * 0.20))
+        logger_width = max(15, int(available_width * 0.15))
         message_width = max(20, int(available_width * 0.25))
 
-        # Extra field gets remaining space or 35% if multiple extra fields
+        # Extra field gets remaining space or 40% if multiple extra fields
         if extra_field_names:
-            extra_field_width = max(15, int(available_width * 0.35))
+            extra_field_width = max(15, int(available_width * 0.40))
         else:
             extra_field_width = 0
 
