@@ -208,25 +208,74 @@ class KeyBindingManager:
                 self.shell.log_view_controller.toggle_follow_mode()
                 asyncio.create_task(self.shell.log_view_controller.refresh())
 
-        @kb.add('f', filter=Condition(lambda: self.shell.in_log_view_mode))
+        @kb.add('f', filter=Condition(lambda: self.shell.in_log_view_mode and not self.shell.log_view_controller.in_modal))
         def _(event):
             """Handle 'f' in log view mode - set logger filter (modal prompt)."""
-            # TODO: Implement modal input dialog for logger filter
-            # For now, show placeholder message
-            pass
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.show_filter_modal()
+                asyncio.create_task(self.shell.log_view_controller._render())
 
-        @kb.add('/', filter=Condition(lambda: self.shell.in_log_view_mode))
+        @kb.add('/', filter=Condition(lambda: self.shell.in_log_view_mode and not self.shell.log_view_controller.in_modal))
         def _(event):
             """Handle '/' in log view mode - edit search pattern (modal prompt)."""
-            # TODO: Implement modal input dialog for search pattern
-            # For now, show placeholder message
-            pass
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.show_search_modal()
+                asyncio.create_task(self.shell.log_view_controller._render())
 
-        @kb.add('?', filter=Condition(lambda: self.shell.in_log_view_mode))
+        @kb.add('?', filter=Condition(lambda: self.shell.in_log_view_mode and not self.shell.log_view_controller.in_modal))
         def _(event):
             """Handle '?' in log view mode - show help modal."""
-            # TODO: Implement help modal
-            # For now, show placeholder message
-            pass
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.show_help_modal()
+                asyncio.create_task(self.shell.log_view_controller._render())
+
+        # Modal mode key bindings (when in modal dialog)
+        @kb.add('enter', filter=Condition(lambda: self.shell.in_log_view_mode and self.shell.log_view_controller.in_modal))
+        def _(event):
+            """Handle Enter in modal - accept input."""
+            if self.shell.log_view_controller:
+                if self.shell.log_view_controller.modal_type == "help":
+                    # Help modal: just close
+                    self.shell.log_view_controller.close_modal(accept=False)
+                else:
+                    # Filter/Search modal: accept input
+                    self.shell.log_view_controller.close_modal(accept=True)
+                asyncio.create_task(self.shell.log_view_controller.refresh())
+
+        @kb.add('escape', filter=Condition(lambda: self.shell.in_log_view_mode and self.shell.log_view_controller.in_modal))
+        def _(event):
+            """Handle Escape in modal - cancel."""
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.close_modal(accept=False)
+                asyncio.create_task(self.shell.log_view_controller._render())
+
+        @kb.add('c-r', filter=Condition(lambda: self.shell.in_log_view_mode and self.shell.log_view_controller.in_modal and self.shell.log_view_controller.modal_type == "search"))
+        def _(event):
+            """Handle Ctrl+R in search modal - toggle regex mode."""
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.search_regex = not self.shell.log_view_controller.search_regex
+                asyncio.create_task(self.shell.log_view_controller._render())
+
+        @kb.add('backspace', filter=Condition(lambda: self.shell.in_log_view_mode and self.shell.log_view_controller.in_modal and self.shell.log_view_controller.modal_type in ("filter", "search")))
+        def _(event):
+            """Handle Backspace in modal - delete character."""
+            if self.shell.log_view_controller:
+                self.shell.log_view_controller.modal_backspace()
+                asyncio.create_task(self.shell.log_view_controller._render())
+
+        # Catch all printable characters in modal
+        @kb.add('<any>', filter=Condition(lambda: self.shell.in_log_view_mode and self.shell.log_view_controller.in_modal))
+        def _(event):
+            """Handle character input in modal."""
+            if self.shell.log_view_controller:
+                # Close help modal on any key
+                if self.shell.log_view_controller.modal_type == "help":
+                    self.shell.log_view_controller.close_modal(accept=False)
+                    asyncio.create_task(self.shell.log_view_controller._render())
+                # Add character to filter/search input
+                elif self.shell.log_view_controller.modal_type in ("filter", "search"):
+                    if hasattr(event, 'data') and event.data and len(event.data) == 1 and event.data.isprintable():
+                        self.shell.log_view_controller.modal_add_char(event.data)
+                        asyncio.create_task(self.shell.log_view_controller._render())
 
         return kb

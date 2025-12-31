@@ -546,6 +546,8 @@ class LogViewController:
         # Modal state
         self.in_modal = False
         self.modal_type: Optional[str] = None  # 'filter', 'search', 'help'
+        self.modal_input: str = ""  # Current modal input text
+        self.modal_cursor_pos: int = 0  # Cursor position in modal input
 
     @property
     def is_active(self) -> bool:
@@ -699,6 +701,77 @@ class LogViewController:
         await self._fetch_logs()
         await self._render()
 
+    def show_filter_modal(self) -> None:
+        """Show modal dialog for logger filter input."""
+        self.in_modal = True
+        self.modal_type = "filter"
+        self.modal_input = self.logger_filter or ""
+        self.modal_cursor_pos = len(self.modal_input)
+
+    def show_search_modal(self) -> None:
+        """Show modal dialog for search pattern input."""
+        self.in_modal = True
+        self.modal_type = "search"
+        self.modal_input = self.search_pattern or ""
+        self.modal_cursor_pos = len(self.modal_input)
+
+    def show_help_modal(self) -> None:
+        """Show help modal with keybindings."""
+        self.in_modal = True
+        self.modal_type = "help"
+
+    def close_modal(self, accept: bool = False) -> None:
+        """
+        Close the current modal.
+
+        Args:
+            accept: If True, apply the modal input; if False, cancel
+        """
+        if not self.in_modal:
+            return
+
+        if accept:
+            if self.modal_type == "filter":
+                self.set_logger_filter(self.modal_input if self.modal_input else None)
+            elif self.modal_type == "search":
+                # For search modal, also ask about regex mode
+                # For now, keep current regex setting
+                self.set_search_pattern(self.modal_input if self.modal_input else None, self.search_regex)
+
+        self.in_modal = False
+        self.modal_type = None
+        self.modal_input = ""
+        self.modal_cursor_pos = 0
+
+    def modal_add_char(self, char: str) -> None:
+        """Add character to modal input at cursor position."""
+        self.modal_input = (
+            self.modal_input[:self.modal_cursor_pos] +
+            char +
+            self.modal_input[self.modal_cursor_pos:]
+        )
+        self.modal_cursor_pos += 1
+
+    def modal_backspace(self) -> None:
+        """Delete character before cursor in modal input."""
+        if self.modal_cursor_pos > 0:
+            self.modal_input = (
+                self.modal_input[:self.modal_cursor_pos - 1] +
+                self.modal_input[self.modal_cursor_pos:]
+            )
+            self.modal_cursor_pos -= 1
+
+    def modal_move_cursor(self, direction: str) -> None:
+        """Move cursor in modal input."""
+        if direction == "left":
+            self.modal_cursor_pos = max(0, self.modal_cursor_pos - 1)
+        elif direction == "right":
+            self.modal_cursor_pos = min(len(self.modal_input), self.modal_cursor_pos + 1)
+        elif direction == "home":
+            self.modal_cursor_pos = 0
+        elif direction == "end":
+            self.modal_cursor_pos = len(self.modal_input)
+
     def _show_loading(self) -> None:
         """Show loading message."""
         loading_msg = "\033[1;36m╔═══════════════════════════════════════════════════════════╗\033[0m\n"
@@ -814,12 +887,77 @@ class LogViewController:
                 )
                 output += formatted_line
 
+        # Add modal overlay if in modal mode
+        if self.in_modal:
+            output += self._render_modal()
+
         # Update buffer
         self.log_view_buffer.set_document(
             Document(text=output, cursor_position=0),
             bypass_readonly=True
         )
         self.app.invalidate()
+
+    def _render_modal(self) -> str:
+        """Render modal dialog overlay."""
+        modal_output = "\n\n"
+
+        if self.modal_type == "filter":
+            modal_output += "\033[1;36m╔═══════════════════════════════════════════════════════════╗\033[0m\n"
+            modal_output += "\033[1;36m║                    Logger Filter                          ║\033[0m\n"
+            modal_output += "\033[1;36m╠═══════════════════════════════════════════════════════════╣\033[0m\n"
+            modal_output += "\033[0m║ Enter logger name prefix (e.g., govee.api)                ║\033[0m\n"
+            modal_output += "\033[0m║ Leave empty to clear filter                               ║\033[0m\n"
+            modal_output += "\033[1;36m╠═══════════════════════════════════════════════════════════╣\033[0m\n"
+            modal_output += f"\033[0m║ {self.modal_input:<57} ║\033[0m\n"
+            modal_output += "\033[1;36m╠═══════════════════════════════════════════════════════════╣\033[0m\n"
+            modal_output += "\033[2m║ Enter: Accept  │  Esc: Cancel                             ║\033[0m\n"
+            modal_output += "\033[1;36m╚═══════════════════════════════════════════════════════════╝\033[0m\n"
+
+        elif self.modal_type == "search":
+            modal_output += "\033[1;36m╔═══════════════════════════════════════════════════════════╗\033[0m\n"
+            modal_output += "\033[1;36m║                    Search Pattern                         ║\033[0m\n"
+            modal_output += "\033[1;36m╠═══════════════════════════════════════════════════════════╣\033[0m\n"
+            modal_output += "\033[0m║ Enter search pattern                                      ║\033[0m\n"
+            modal_output += "\033[0m║ Leave empty to clear search                               ║\033[0m\n"
+            regex_status = "ON" if self.search_regex else "OFF"
+            modal_output += f"\033[0m║ Regex mode: {regex_status:<44} ║\033[0m\n"
+            modal_output += "\033[1;36m╠═══════════════════════════════════════════════════════════╣\033[0m\n"
+            modal_output += f"\033[0m║ {self.modal_input:<57} ║\033[0m\n"
+            modal_output += "\033[1;36m╠═══════════════════════════════════════════════════════════╣\033[0m\n"
+            modal_output += "\033[2m║ Enter: Accept  │  Esc: Cancel  │  Ctrl+R: Toggle Regex   ║\033[0m\n"
+            modal_output += "\033[1;36m╚═══════════════════════════════════════════════════════════╝\033[0m\n"
+
+        elif self.modal_type == "help":
+            modal_output += "\033[1;36m╔═══════════════════════════════════════════════════════════╗\033[0m\n"
+            modal_output += "\033[1;36m║                 Logs View - Help                          ║\033[0m\n"
+            modal_output += "\033[1;36m╠═══════════════════════════════════════════════════════════╣\033[0m\n"
+            modal_output += "\033[1;33m║ Navigation:                                               ║\033[0m\n"
+            modal_output += "\033[0m║   PgUp/PgDn       Previous/Next page                      ║\033[0m\n"
+            modal_output += "\033[0m║   Home/End        First/Last page                         ║\033[0m\n"
+            modal_output += "\033[1;36m╠═══════════════════════════════════════════════════════════╣\033[0m\n"
+            modal_output += "\033[1;33m║ Filters:                                                  ║\033[0m\n"
+            modal_output += "\033[0m║   l               Cycle log level filter                  ║\033[0m\n"
+            modal_output += "\033[0m║                   (INFO→WARNING→ERROR→CRITICAL→ALL)       ║\033[0m\n"
+            modal_output += "\033[0m║   f               Set logger filter (prefix match)        ║\033[0m\n"
+            modal_output += "\033[0m║   /               Edit search pattern                     ║\033[0m\n"
+            modal_output += "\033[0m║   c               Clear logger filter                     ║\033[0m\n"
+            modal_output += "\033[1;36m╠═══════════════════════════════════════════════════════════╣\033[0m\n"
+            modal_output += "\033[1;33m║ Actions:                                                  ║\033[0m\n"
+            modal_output += "\033[0m║   r               Manual refresh current page             ║\033[0m\n"
+            modal_output += "\033[0m║   Space           Toggle follow mode (auto-jump to last)  ║\033[0m\n"
+            modal_output += "\033[0m║   ?               Show this help                          ║\033[0m\n"
+            modal_output += "\033[0m║   q/Esc           Exit logs view                          ║\033[0m\n"
+            modal_output += "\033[1;36m╠═══════════════════════════════════════════════════════════╣\033[0m\n"
+            modal_output += "\033[1;33m║ Info:                                                     ║\033[0m\n"
+            modal_output += "\033[0m║   Auto-refresh:   Every 5 seconds                         ║\033[0m\n"
+            modal_output += "\033[0m║   Follow mode:    OFF by default, toggle with Space       ║\033[0m\n"
+            modal_output += "\033[0m║   Level filter:   Additive (ERROR shows ERROR+CRITICAL)   ║\033[0m\n"
+            modal_output += "\033[1;36m╠═══════════════════════════════════════════════════════════╣\033[0m\n"
+            modal_output += "\033[2m║ Press any key to close                                    ║\033[0m\n"
+            modal_output += "\033[1;36m╚═══════════════════════════════════════════════════════════╝\033[0m\n"
+
+        return modal_output
 
     def _format_timestamp(self, iso_timestamp: str) -> str:
         """
