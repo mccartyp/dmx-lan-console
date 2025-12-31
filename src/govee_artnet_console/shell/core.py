@@ -947,7 +947,7 @@ class GoveeShell:
                mappings delete <id>
                mappings channel-map
         Templates (multi-channel): RGB, RGBCT, DimRGBCT, DimCT
-        Fields (single-channel): power [all], brightness [caps], r/red [caps], g/green [caps], b/blue [caps], ct/color_temp [caps]
+        Fields (single-channel): power [all], dimmer [caps], r/red [caps], g/green [caps], b/blue [caps], ct/color_temp [caps]
         Note: --universe defaults to 0; [caps] = requires device capability check
         Use 'help mappings create', 'mappings create --help', or 'mappings create ?' for detailed creation help
         """

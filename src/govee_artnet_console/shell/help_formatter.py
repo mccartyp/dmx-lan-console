@@ -273,7 +273,7 @@ class HelpFormatter:
         self.shell._append_output("  mappings create --device-id <id> [--universe <num>] --channel <num> --length <num>\n")
         self.shell._append_output("\n[bold]Available fields (for single channel mappings):[/]\n")
         self.shell._append_output("  • power              - Power on/off (DMX >= 128 = on, < 128 = off) [all devices]\n")
-        self.shell._append_output("  • brightness         - Dimmer control (0-255) [requires brightness capability]\n")
+        self.shell._append_output("  • dimmer             - Dimmer control (0-255) [requires brightness capability]\n")
         self.shell._append_output("  • r (or red)         - Red channel only [requires color capability]\n")
         self.shell._append_output("  • g (or green)       - Green channel only [requires color capability]\n")
         self.shell._append_output("  • b (or blue)        - Blue channel only [requires color capability]\n")
