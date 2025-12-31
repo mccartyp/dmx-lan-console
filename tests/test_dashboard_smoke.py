@@ -1,26 +1,11 @@
 """Smoke tests for monitoring dashboard functionality.
 
 These tests verify basic dashboard and events functionality works with the mock server.
-Run the mock server first: python tests/mock_server.py
-Then run these tests: pytest tests/test_dashboard_smoke.py -v
+The mock server starts automatically via pytest fixtures.
+Run these tests: pytest tests/test_dashboard_smoke.py -v
 """
 
 import pytest
-from govee_artnet_console.shell.controllers import EventsController
-from govee_artnet_console.cli import ClientConfig
-from httpx import Client
-
-
-@pytest.fixture
-def mock_server_url():
-    """Mock server URL for testing."""
-    return "http://127.0.0.1:8000"
-
-
-@pytest.fixture
-def client(mock_server_url):
-    """Create HTTP client for testing."""
-    return Client(base_url=mock_server_url, timeout=5.0)
 
 
 def test_health_endpoint_returns_subsystems(client):
