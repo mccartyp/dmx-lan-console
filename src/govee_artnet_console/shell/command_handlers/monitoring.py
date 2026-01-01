@@ -595,13 +595,13 @@ class MonitoringCommandHandler(CommandHandler):
                     last_seen = device.get("last_seen") or ""
                     mapping_count = device.get("mapping_count", 0) or 0
 
-                    # Status indicator - inline markup like in _monitor_devices
+                    # Status indicator using Text with style (like column-level styles)
                     if offline:
-                        status = "[red]● Off[/]"
+                        status = Text("● Off", style="red")
                     elif stale:
-                        status = "[dim]● Stale[/]"
+                        status = Text("● Stale", style="dim")
                     else:
-                        status = "[green]● On[/]"
+                        status = Text("● On", style="green")
 
                     # Format last seen as relative time
                     last_seen_str = "-"
