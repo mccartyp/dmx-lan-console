@@ -427,6 +427,14 @@ class MonitoringCommandHandler(CommandHandler):
             devices_data = _handle_response(self.client.get("/devices"))
             mappings_data = _handle_response(self.client.get("/mappings"))
 
+            # Handle None responses
+            if health_data is None:
+                health_data = {}
+            if devices_data is None:
+                devices_data = []
+            if mappings_data is None:
+                mappings_data = []
+
             # Calculate statistics
             total_devices = len(devices_data) if isinstance(devices_data, list) else 0
             online_devices = sum(1 for d in devices_data if not d.get("offline")) if isinstance(devices_data, list) else 0
@@ -440,22 +448,22 @@ class MonitoringCommandHandler(CommandHandler):
             # Statistics Summary Cards using ANSI box drawing
             stats_line = "│  "
             stats_line += f"[cyan]┌─────────┐[/]  [green]┌─────────┐[/]  [red]┌─────────┐[/]  [blue]┌─────────┐[/]"
-            stats_line += "  │"
+            stats_line += " " * 12 + "│"
             self.shell._append_output(stats_line + "\n")
 
             stats_line = "│  "
             stats_line += f"[cyan]│ Devices │[/]  [green]│ Online  │[/]  [red]│ Offline │[/]  [blue]│ Map'ngs │[/]"
-            stats_line += "  │"
+            stats_line += " " * 12 + "│"
             self.shell._append_output(stats_line + "\n")
 
             stats_line = "│  "
             stats_line += f"[cyan]│   {total_devices:3d}   │[/]  [green]│   {online_devices:3d}   │[/]  [red]│   {offline_devices:3d}   │[/]  [blue]│   {total_mappings:3d}   │[/]"
-            stats_line += "  │"
+            stats_line += " " * 12 + "│"
             self.shell._append_output(stats_line + "\n")
 
             stats_line = "│  "
             stats_line += f"[cyan]└─────────┘[/]  [green]└─────────┘[/]  [red]└─────────┘[/]  [blue]└─────────┘[/]"
-            stats_line += "  │"
+            stats_line += " " * 12 + "│"
             self.shell._append_output(stats_line + "\n")
 
             self.shell._append_output("[bold cyan]├" + "─" * 64 + "┤[/]\n")
@@ -473,7 +481,7 @@ class MonitoringCommandHandler(CommandHandler):
                     # First subsystem in pair
                     name = subsystem_names[i]
                     data = subsystems[name]
-                    status = data.get("status", "unknown")
+                    status = data.get("status", "unknown").lower()
 
                     if status == "ok":
                         icon = "🟢"
@@ -497,7 +505,7 @@ class MonitoringCommandHandler(CommandHandler):
                     if i + 1 < len(subsystem_names):
                         name = subsystem_names[i + 1]
                         data = subsystems[name]
-                        status = data.get("status", "unknown")
+                        status = data.get("status", "unknown").lower()
 
                         if status == "ok":
                             icon = "🟢"
