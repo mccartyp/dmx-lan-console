@@ -575,10 +575,10 @@ class MonitoringCommandHandler(CommandHandler):
                 )
                 devices_table.add_column("ID", style="cyan", no_wrap=True, width=17)
                 devices_table.add_column("Status", justify="center", width=6, no_wrap=True, overflow="ignore")
-                devices_table.add_column("IP", style="dim", width=15)
-                devices_table.add_column("Model", style="yellow", width=6)
-                devices_table.add_column("Name", style="green", width=20)
-                devices_table.add_column("Last Seen", style="dim", width=10)
+                devices_table.add_column("IP", style="dim", no_wrap=True, width=15)
+                devices_table.add_column("Model", style="yellow", no_wrap=True, width=6)
+                devices_table.add_column("Name", style="green", no_wrap=True, width=20)
+                devices_table.add_column("Last Seen", style="dim", no_wrap=True, width=10)
                 devices_table.add_column("Maps", justify="right", width=4)
 
                 # Sort devices: online first, then by ID
@@ -595,13 +595,13 @@ class MonitoringCommandHandler(CommandHandler):
                     last_seen = device.get("last_seen") or ""
                     mapping_count = device.get("mapping_count", 0) or 0
 
-                    # Status indicator - inline markup like in _monitor_devices
+                    # Status indicator using Text with style (like column-level styles)
                     if offline:
-                        status = "[red]● Off[/]"
+                        status = Text("● Off", style="red")
                     elif stale:
-                        status = "[dim]● Stale[/]"
+                        status = Text("● Stale", style="dim")
                     else:
-                        status = "[green]● On[/]"
+                        status = Text("● On", style="green")
 
                     # Format last seen as relative time
                     last_seen_str = "-"
