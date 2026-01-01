@@ -138,20 +138,22 @@ async def test_events_include_required_fields(mock_server_url):
         events_seen = {}
         timeout = 15  # Wait up to 15 seconds
 
+        async def collect_events():
+            while len(events_seen) < 5:  # Collect at least 5 different event types
+                message = await websocket.recv()
+                data = json.loads(message)
+
+                # Skip pings
+                if data.get("type") == "ping":
+                    await websocket.send(json.dumps({"type": "pong"}))
+                    continue
+
+                if "event" in data:
+                    event_type = data["event"]
+                    events_seen[event_type] = data
+
         try:
-            async with asyncio.timeout(timeout):
-                while len(events_seen) < 5:  # Collect at least 5 different event types
-                    message = await websocket.recv()
-                    data = json.loads(message)
-
-                    # Skip pings
-                    if data.get("type") == "ping":
-                        await websocket.send(json.dumps({"type": "pong"}))
-                        continue
-
-                    if "event" in data:
-                        event_type = data["event"]
-                        events_seen[event_type] = data
+            await asyncio.wait_for(collect_events(), timeout=timeout)
         except asyncio.TimeoutError:
             pass  # It's ok if we don't see all event types
 
