@@ -36,6 +36,7 @@ FAKE_DEVICES = [
         "segment_count": 1,
         "last_seen": "2025-12-30T10:00:00Z",
         "first_seen": "2025-12-29T08:00:00Z",
+        "mapping_count": 2,
     },
     {
         "id": "11:22:33:44:55:66:77:88",
@@ -59,6 +60,7 @@ FAKE_DEVICES = [
         "segment_count": 5,
         "last_seen": "2025-12-30T10:00:00Z",
         "first_seen": "2025-12-30T09:00:00Z",
+        "mapping_count": 1,
     },
     {
         "id": "99:88:77:66:55:44:33:22",
@@ -82,6 +84,7 @@ FAKE_DEVICES = [
         "segment_count": 1,
         "last_seen": "2025-12-29T15:00:00Z",
         "first_seen": "2025-12-28T10:00:00Z",
+        "mapping_count": 0,
     },
 ]
 

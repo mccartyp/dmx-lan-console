@@ -435,20 +435,6 @@ class MonitoringCommandHandler(CommandHandler):
             if mappings_data is None:
                 mappings_data = []
 
-            # Calculate mapping counts per device
-            mapping_counts = {}
-            if isinstance(mappings_data, list):
-                for mapping in mappings_data:
-                    device_id = mapping.get("device_id")
-                    if device_id:
-                        mapping_counts[device_id] = mapping_counts.get(device_id, 0) + 1
-
-            # Add mapping_count to each device if not present
-            if isinstance(devices_data, list):
-                for device in devices_data:
-                    if "mapping_count" not in device:
-                        device["mapping_count"] = mapping_counts.get(device.get("id"), 0)
-
             # Calculate statistics
             total_devices = len(devices_data) if isinstance(devices_data, list) else 0
             online_devices = sum(1 for d in devices_data if not d.get("offline")) if isinstance(devices_data, list) else 0
