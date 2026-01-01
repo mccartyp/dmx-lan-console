@@ -595,13 +595,13 @@ class MonitoringCommandHandler(CommandHandler):
                     last_seen = device.get("last_seen") or ""
                     mapping_count = device.get("mapping_count", 0) or 0
 
-                    # Status indicator using Text with style (like column-level styles)
+                    # Status indicator using inline markup (like _monitor_devices)
                     if offline:
-                        status = Text("● Off", style="red")
+                        status = "[red]● Off[/]"
                     elif stale:
-                        status = Text("● Stale", style="dim")
+                        status = "[dim]● Stale[/]"
                     else:
-                        status = Text("● On", style="green")
+                        status = "[green]● On[/]"
 
                     # Format last seen as relative time
                     last_seen_str = "-"
@@ -641,13 +641,14 @@ class MonitoringCommandHandler(CommandHandler):
                     if len(display_id) > 17:
                         display_id = display_id[:14] + "..."
 
+                    # Apply inline markup to all values (column styles don't work with StringIO rendering)
                     devices_table.add_row(
-                        display_id,
+                        f"[cyan]{display_id}[/]",
                         status,
-                        ip or "-",
-                        model or "-",
-                        name or "-",
-                        last_seen_str,
+                        f"[dim]{ip or '-'}[/]",
+                        f"[yellow]{model or '-'}[/]",
+                        f"[green]{name or '-'}[/]",
+                        f"[dim]{last_seen_str}[/]",
                         str(mapping_count),
                     )
 
