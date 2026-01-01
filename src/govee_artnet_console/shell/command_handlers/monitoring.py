@@ -574,7 +574,7 @@ class MonitoringCommandHandler(CommandHandler):
                     width=INNER_WIDTH - 2,  # Fit within dashboard borders with left padding
                 )
                 devices_table.add_column("ID", style="cyan", no_wrap=True, width=17)
-                devices_table.add_column("Status", justify="center", width=6)
+                devices_table.add_column("Status", justify="center", width=6, no_wrap=True, overflow="ignore")
                 devices_table.add_column("IP", style="dim", width=15)
                 devices_table.add_column("Model", style="yellow", width=6)
                 devices_table.add_column("Name", style="green", width=20)
@@ -595,13 +595,13 @@ class MonitoringCommandHandler(CommandHandler):
                     last_seen = device.get("last_seen") or ""
                     mapping_count = device.get("mapping_count", 0) or 0
 
-                    # Status indicator
+                    # Status indicator - using inline markup for proper color rendering
                     if offline:
-                        status = Text("● Off", style="red")
+                        status = "[red]●[/red] [red]Off[/red]"
                     elif stale:
-                        status = Text("● Stale", style="dim")
+                        status = "[dim]●[/dim] [dim]Stale[/dim]"
                     else:
-                        status = Text("● On", style="green")
+                        status = "[green]●[/green] [green]On[/green]"
 
                     # Format last seen as relative time
                     last_seen_str = "-"
@@ -662,7 +662,7 @@ class MonitoringCommandHandler(CommandHandler):
                 from rich.console import Console
 
                 string_io = StringIO()
-                temp_console = Console(file=string_io, width=INNER_WIDTH - 2, legacy_windows=False)
+                temp_console = Console(file=string_io, width=INNER_WIDTH - 2, legacy_windows=False, force_terminal=True)
                 temp_console.print(devices_table)
                 table_lines = string_io.getvalue().rstrip().split('\n')
 
