@@ -153,21 +153,27 @@ class MonitoringCommandHandler(CommandHandler):
             )
             table.add_column("Universe", style="dim", width=8, justify="right")
             table.add_column("Channel", style="cyan", width=8, justify="right")
-            table.add_column("Device ID", style="yellow", width=23)
+            table.add_column("Device ID", style="yellow", width=20)
+            table.add_column("Protocol", style="white", width=12)
             table.add_column("IP Address", style="green", width=15)
-            table.add_column("Name", style="blue", width=30)
-            table.add_column("Function", style="magenta", width=15)
-            table.add_column("Mapping ID", style="blue", width=12, justify="right")
+            table.add_column("Name", style="blue", width=25)
+            table.add_column("Function", style="magenta", width=12)
+            table.add_column("Mapping ID", style="blue", width=10, justify="right")
+
+            # Import protocol formatter
+            from ...config import format_protocol
 
             # Add rows for populated channels (sorted by universe, then channel number)
             for (universe, channel_num) in sorted(channel_map.keys()):
                 device_id, function, mapping_id = channel_map[(universe, channel_num)]
 
-                # Look up IP address and name dynamically from fresh device data
+                # Look up IP address, name, and protocol dynamically from fresh device data
                 device = device_lookup.get(device_id, {})
                 device_ip = device.get("ip", "N/A")
                 device_name = device.get("name", "")
+                device_protocol = device.get("protocol", "govee")
                 name_display = device_name if device_name else "[dim]-[/]"
+                protocol_display = format_protocol(device_protocol)
 
                 # Apply color coding to functions
                 if "Red" in function:
@@ -186,7 +192,8 @@ class MonitoringCommandHandler(CommandHandler):
                 table.add_row(
                     str(universe),
                     str(channel_num),
-                    device_id[:23],
+                    device_id[:20],
+                    protocol_display,
                     device_ip,
                     name_display,
                     function_style,
@@ -424,12 +431,15 @@ class MonitoringCommandHandler(CommandHandler):
             # Fetch data in parallel
             self.shell._append_output("[bold cyan]Fetching dashboard data...[/]\n")
             health_data = _handle_response(self.client.get("/health"))
+            status_data = _handle_response(self.client.get("/status"))
             devices_data = _handle_response(self.client.get("/devices"))
             mappings_data = _handle_response(self.client.get("/mappings"))
 
             # Handle None responses
             if health_data is None:
                 health_data = {}
+            if status_data is None:
+                status_data = {}
             if devices_data is None:
                 devices_data = []
             if mappings_data is None:
@@ -556,6 +566,45 @@ class MonitoringCommandHandler(CommandHandler):
 
                     self.shell._append_output(line + "\n")
 
+                self.shell._append_output(f"[bold cyan]├{'─' * INNER_WIDTH}┤[/]\n")
+
+            # Protocol Stats Section
+            protocols_stats = status_data.get("protocols", {})
+            if protocols_stats:
+                from ...config import format_protocol
+
+                protocol_title = "[bold]Protocol Breakdown[/]"
+                title_padding = INNER_WIDTH - len("Protocol Breakdown") - 2
+                self.shell._append_output(f"[bold cyan]│[/] {protocol_title}{' ' * title_padding} [bold cyan]│[/]\n")
+                self.shell._append_output("[bold cyan]│[/]" + " " * INNER_WIDTH + "[bold cyan]│[/]\n")
+
+                # Create protocol stats table - compact format
+                for protocol_name, stats in sorted(protocols_stats.items()):
+                    proto_display = format_protocol(protocol_name)
+                    total = stats.get("total", 0)
+                    enabled = stats.get("enabled", 0)
+                    offline = stats.get("offline", 0)
+
+                    # Format: "  🔵 Govee: 5 total (4 enabled, 1 offline)"
+                    line = f"[bold cyan]│[/]  {proto_display}: {total} total ("
+                    if enabled > 0:
+                        line += f"[green]{enabled} enabled[/]"
+                    else:
+                        line += f"[dim]{enabled} enabled[/]"
+
+                    if offline > 0:
+                        line += f", [red]{offline} offline[/]"
+                    else:
+                        line += f", [dim]{offline} offline[/]"
+                    line += ")"
+
+                    # Calculate padding - need to account for Rich markup not being visible
+                    visible_text = f"  {protocol_name.title()}: {total} total ({enabled} enabled, {offline} offline)"
+                    padding_needed = INNER_WIDTH - len(visible_text) - 6  # -6 for emoji
+                    line += " " * padding_needed + "[bold cyan]│[/]"
+                    self.shell._append_output(line + "\n")
+
+                self.shell._append_output("[bold cyan]│[/]" + " " * INNER_WIDTH + "[bold cyan]│[/]\n")
                 self.shell._append_output(f"[bold cyan]├{'─' * INNER_WIDTH}┤[/]\n")
 
             # Device Table
