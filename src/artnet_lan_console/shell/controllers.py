@@ -24,7 +24,7 @@ from prompt_toolkit.document import Document
 if TYPE_CHECKING:
     from prompt_toolkit import Application
     from prompt_toolkit.buffer import Buffer
-    from ..shell.core import GoveeShell
+    from ..shell.core import ArtNetShell
 
 
 class ConnectionState(Enum):
@@ -401,7 +401,7 @@ class EventsController:
     BATCH_INTERVAL = 0.1  # 100ms batching interval
     MAX_RECONNECT_DELAY = 10.0  # Max backoff delay
 
-    def __init__(self, app: Application, events_buffer: Buffer, server_url: str, shell: GoveeShell):
+    def __init__(self, app: Application, events_buffer: Buffer, server_url: str, shell: ArtNetShell):
         """
         Initialize the events controller.
 
@@ -409,7 +409,7 @@ class EventsController:
             app: The prompt_toolkit Application instance
             events_buffer: Buffer to append event lines to (for logs events view)
             server_url: Base HTTP server URL (will be converted to WebSocket)
-            shell: Reference to GoveeShell for console notifications
+            shell: Reference to ArtNetShell for console notifications
         """
         self.app = app
         self.events_buffer = events_buffer
@@ -936,14 +936,14 @@ class WatchController:
     # Default refresh interval
     DEFAULT_REFRESH_INTERVAL = 5.0  # 5 seconds
 
-    def __init__(self, app: Application, watch_buffer: Buffer, shell: GoveeShell):
+    def __init__(self, app: Application, watch_buffer: Buffer, shell: ArtNetShell):
         """
         Initialize the watch controller.
 
         Args:
             app: The prompt_toolkit Application instance
             watch_buffer: Buffer to display watch output
-            shell: Reference to GoveeShell instance for executing commands
+            shell: Reference to ArtNetShell instance for executing commands
         """
         self.app = app
         self.watch_buffer = watch_buffer
@@ -1085,14 +1085,14 @@ class LogViewController:
     # Auto-refresh interval
     REFRESH_INTERVAL = 5.0  # 5 seconds
 
-    def __init__(self, app: Application, log_view_buffer: Buffer, shell: GoveeShell):
+    def __init__(self, app: Application, log_view_buffer: Buffer, shell: ArtNetShell):
         """
         Initialize the log view controller.
 
         Args:
             app: The prompt_toolkit Application instance
             log_view_buffer: Buffer to display log view output
-            shell: Reference to GoveeShell instance for API calls
+            shell: Reference to ArtNetShell instance for API calls
         """
         self.app = app
         self.log_view_buffer = log_view_buffer

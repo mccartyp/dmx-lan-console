@@ -13,18 +13,18 @@ from typing import TYPE_CHECKING
 from .controllers import ConnectionState
 
 if TYPE_CHECKING:
-    from .core import GoveeShell
+    from .core import ArtNetShell
 
 
 class ToolbarManager:
     """Manages the bottom toolbar display and status updates."""
 
-    def __init__(self, shell: GoveeShell):
+    def __init__(self, shell: ArtNetShell):
         """
         Initialize the toolbar manager.
 
         Args:
-            shell: Reference to the GoveeShell instance
+            shell: Reference to the ArtNetShell instance
         """
         self.shell = shell
 

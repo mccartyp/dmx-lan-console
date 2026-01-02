@@ -1,7 +1,7 @@
 .PHONY: help install uninstall deb clean test dev-install
 
-PACKAGE_NAME = govee-artnet-console
-VERSION = 1.0.2
+PACKAGE_NAME = artnet-lan-console
+VERSION = 2.0.0
 PYTHON = python3
 PIP = pip3
 
@@ -17,7 +17,7 @@ DEB_INSTALL_DIR = $(DEB_PKG_DIR)/usr
 DEB_OUTPUT_DIR = dist
 
 help:
-	@echo "Govee ArtNet Console - Makefile targets:"
+	@echo "ArtNet LAN Console - Makefile targets:"
 	@echo ""
 	@echo "  install        Install to $(PREFIX) (requires root)"
 	@echo "  uninstall      Remove from $(PREFIX) (requires root)"
@@ -46,7 +46,7 @@ uninstall:
 	@echo "Uninstalling $(PACKAGE_NAME) from $(PREFIX)..."
 	$(PIP) uninstall -y $(PACKAGE_NAME) || true
 	rm -f $(BINDIR)/$(PACKAGE_NAME)
-	rm -rf $(LIBDIR)/govee_artnet_console*
+	rm -rf $(LIBDIR)/artnet_lan_console*
 	@echo "Uninstallation complete!"
 
 # Build Debian package
@@ -65,18 +65,18 @@ deb: clean
 	@echo "Architecture: all" >> $(DEB_PKG_DIR)/DEBIAN/control
 	@echo "Depends: python3 (>= 3.10), python3-httpx (>= 0.22.0), python3-websockets (>= 12.0), python3-yaml (>= 6.0.0), python3-rich (>= 13.0.0), python3-prompt-toolkit (>= 3.0.0)" >> $(DEB_PKG_DIR)/DEBIAN/control
 	@echo "Maintainer: mccartyp <mccartyp@gmail.com>" >> $(DEB_PKG_DIR)/DEBIAN/control
-	@echo "Description: Interactive CLI console for Govee ArtNet LAN Bridge" >> $(DEB_PKG_DIR)/DEBIAN/control
-	@echo " Provides an interactive shell for managing Govee devices via the" >> $(DEB_PKG_DIR)/DEBIAN/control
-	@echo " Govee ArtNet LAN Bridge REST API. Features include device management," >> $(DEB_PKG_DIR)/DEBIAN/control
-	@echo " DMX mapping configuration, real-time monitoring, and log streaming." >> $(DEB_PKG_DIR)/DEBIAN/control
+	@echo "Description: Interactive CLI console for ArtNet LAN Bridge" >> $(DEB_PKG_DIR)/DEBIAN/control
+	@echo " Provides an interactive shell for managing multi-protocol smart lighting" >> $(DEB_PKG_DIR)/DEBIAN/control
+	@echo " devices (Govee, LIFX, etc.) via the ArtNet LAN Bridge REST API. Features" >> $(DEB_PKG_DIR)/DEBIAN/control
+	@echo " include device management, DMX mapping, real-time monitoring, and log streaming." >> $(DEB_PKG_DIR)/DEBIAN/control
 
 	@# Copy source files
-	@cp -r src/govee_artnet_console $(DEB_INSTALL_DIR)/lib/python3/dist-packages/
+	@cp -r src/artnet_lan_console $(DEB_INSTALL_DIR)/lib/python3/dist-packages/
 
 	@# Create executable wrapper
 	@echo '#!/usr/bin/env python3' > $(DEB_INSTALL_DIR)/bin/$(PACKAGE_NAME)
 	@echo 'import sys' >> $(DEB_INSTALL_DIR)/bin/$(PACKAGE_NAME)
-	@echo 'from govee_artnet_console.cli import main' >> $(DEB_INSTALL_DIR)/bin/$(PACKAGE_NAME)
+	@echo 'from artnet_lan_console.cli import main' >> $(DEB_INSTALL_DIR)/bin/$(PACKAGE_NAME)
 	@echo 'if __name__ == "__main__":' >> $(DEB_INSTALL_DIR)/bin/$(PACKAGE_NAME)
 	@echo '    sys.exit(main())' >> $(DEB_INSTALL_DIR)/bin/$(PACKAGE_NAME)
 	@chmod +x $(DEB_INSTALL_DIR)/bin/$(PACKAGE_NAME)
