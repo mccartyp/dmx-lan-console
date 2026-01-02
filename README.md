@@ -1,15 +1,15 @@
-# ArtNet LAN Console
+# DMX LAN Console
 
 [![Latest Release](https://img.shields.io/github/v/release/mccartyp/govee-artnet-console)](https://github.com/mccartyp/govee-artnet-console/releases/latest)
 [![Download DEB](https://img.shields.io/badge/download-.deb-blue)](https://github.com/mccartyp/govee-artnet-console/releases/latest)
 [![Python Version](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads())
 [![License](https://img.shields.io/github/license/mccartyp/govee-artnet-console)](LICENSE)
 
-Interactive CLI console for managing multi-protocol smart lighting devices (Govee, LIFX, etc.) via the [ArtNet LAN Bridge](https://github.com/mccartyp/govee-artnet-lan-bridge).
+Interactive CLI console for managing multi-protocol smart lighting devices (Govee, LIFX, etc.) via the [DMX LAN Bridge](https://github.com/mccartyp/govee-artnet-lan-bridge).
 
 ## Overview
 
-`artnet-lan-console` is a standalone command-line tool that provides an interactive shell interface for controlling and monitoring smart lighting devices through the ArtNet LAN Bridge REST API. It's designed as a thin client that can connect to local or remote bridge instances and supports multiple protocols including Govee, LIFX, and more.
+`dmx-lan-console` is a standalone command-line tool that provides an interactive shell interface for controlling and monitoring smart lighting devices through the DMX LAN Bridge REST API. It's designed as a thin client that can connect to local or remote bridge instances and supports multiple protocols including Govee, LIFX, and more.
 
 ## Features
 
@@ -97,20 +97,20 @@ See [INSTALLATION.md](docs/INSTALLATION.md) for detailed installation instructio
 
 ```bash
 # Start interactive shell (connects to localhost:8000 by default)
-artnet-lan-console
+dmx-lan-console
 
 # Connect to remote bridge
-artnet-lan-console --server-url http://192.168.1.100:8000
+dmx-lan-console --server-url http://192.168.1.100:8000
 
 # Use API key authentication
-artnet-lan-console --api-key YOUR_API_KEY
+dmx-lan-console --api-key YOUR_API_KEY
 
 # Or use environment variable (also supports legacy GOVEE_ARTNET_API_KEY)
 export ARTNET_LAN_API_KEY=your-api-key
-artnet-lan-console
+dmx-lan-console
 
 # Run single command without shell
-artnet-lan-console devices list --output table
+dmx-lan-console devices list --output table
 ```
 
 ### First Steps
@@ -152,7 +152,7 @@ logs events --type device              # Filter by event type (device|mapping|he
 
 ## Configuration
 
-Configuration is stored at `~/.artnet_lan_console/config.yaml`:
+Configuration is stored at `~/.dmx_lan_console/config.yaml`:
 
 ```yaml
 # Server profiles
@@ -191,19 +191,19 @@ aliases:
 
 - [Installation Guide](docs/INSTALLATION.md) - Detailed installation instructions
 - [Usage Guide](docs/USAGE.md) - Complete command reference and examples
-- [ArtNet LAN Bridge](https://github.com/mccartyp/govee-artnet-lan-bridge) - Server component
+- [DMX LAN Bridge](https://github.com/mccartyp/govee-artnet-lan-bridge) - Server component
 
 ## Requirements
 
 - Python 3.10 or higher
-- ArtNet LAN Bridge server running
+- DMX LAN Bridge server running
 - Network connectivity to bridge server
 
 ## Architecture
 
 ```
 ┌─────────────────────────┐
-│  artnet-lan-console     │  ← This package (CLI client)
+│  dmx-lan-console     │  ← This package (CLI client)
 │  (Interactive Shell)    │
 └────────────┬────────────┘
              │ HTTP/WebSocket

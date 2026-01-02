@@ -1,4 +1,4 @@
-"""Configuration management for artnet-lan-console."""
+"""Configuration management for dmx-lan-console."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ import yaml
 
 
 # Default configuration directory
-DEFAULT_CONFIG_DIR = Path.home() / ".artnet_lan_console"
+DEFAULT_CONFIG_DIR = Path.home() / ".dmx_lan_console"
 DEFAULT_CONFIG_FILE = DEFAULT_CONFIG_DIR / "config.yaml"
 DEFAULT_HISTORY_FILE = DEFAULT_CONFIG_DIR / "shell_history"
 
@@ -107,7 +107,7 @@ class ShellPreferences:
 
 @dataclass
 class ConsoleConfig:
-    """Main configuration for artnet-lan-console."""
+    """Main configuration for dmx-lan-console."""
 
     servers: dict[str, ServerProfile] = field(default_factory=dict)
     active_server: str = "default"

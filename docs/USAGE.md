@@ -1,6 +1,6 @@
 # ArtNet LAN Console Guide
 
-The ArtNet LAN Console includes a powerful interactive shell mode that provides real-time monitoring, log viewing, and enhanced usability features for managing your multi-protocol smart lighting devices via the ArtNet LAN Bridge.
+The ArtNet LAN Console includes a powerful interactive shell mode that provides real-time monitoring, log viewing, and enhanced usability features for managing your multi-protocol smart lighting devices via the DMX LAN Bridge.
 
 ## Table of Contents
 
@@ -18,10 +18,10 @@ The ArtNet LAN Console includes a powerful interactive shell mode that provides 
 
 ```bash
 # Start interactive shell
-artnet-lan-console
+dmx-lan-console
 
 # Or with custom server URL
-artnet-lan-console --server-url http://192.168.1.100:8000
+dmx-lan-console --server-url http://192.168.1.100:8000
 ```
 
 ### First Steps
@@ -119,7 +119,7 @@ Events are displayed in two ways:
 
 - **Tab completion** - Press Tab to autocomplete commands
 - **History navigation** - Use ↑/↓ arrows to navigate command history
-- **Persistent history** - Command history saved to `~/.artnet_lan_console/shell_history`
+- **Persistent history** - Command history saved to `~/.dmx_lan_console/shell_history`
 - **Reverse search** - Press Ctrl+R to search command history
 
 ### 🔖 Bookmarks
@@ -403,7 +403,7 @@ logs events --type device
 EOF
 
 # Run the batch file
-artnet-lan-console batch load setup.artnet
+dmx-lan-console batch load setup.artnet
 ```
 
 ### 💾 Session Management
@@ -419,7 +419,7 @@ dmx-bridge> session delete my-setup            # Delete a session
 
 ## Configuration
 
-The shell configuration is stored at `~/.artnet_lan_console/config.yaml`:
+The shell configuration is stored at `~/.dmx_lan_console/config.yaml`:
 
 ```yaml
 # Server profiles
