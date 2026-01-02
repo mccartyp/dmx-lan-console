@@ -1,4 +1,4 @@
-"""Core shell module for govee-artnet CLI.
+"""Core shell module for dmx-lan CLI.
 
 This is the main shell class that coordinates all command handlers
 and manages the interactive terminal interface.
@@ -87,7 +87,7 @@ DEFAULT_LOG_LINES = 50
 class ArtNetShell:
     """Interactive shell for the ArtNet LAN bridge using prompt_toolkit."""
 
-    prompt = "artnet-bridge> "
+    prompt = "dmx-bridge> "
 
     def __init__(self, config: ClientConfig):
         """
@@ -115,7 +115,7 @@ class ArtNetShell:
         self.help_formatter = HelpFormatter(self)
 
         # Set up command history and data directory
-        self.data_dir = Path.home() / ".artnet_lan_console"
+        self.data_dir = Path.home() / ".dmx_lan_console"
         self.data_dir.mkdir(exist_ok=True)
         history_file = self.data_dir / "shell_history"
         self.bookmarks_file = self.data_dir / "bookmarks.json"
