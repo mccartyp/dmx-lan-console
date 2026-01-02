@@ -84,10 +84,10 @@ DEFAULT_API_TIMEOUT = 10.0
 WS_RECV_TIMEOUT = 1.0
 DEFAULT_LOG_LINES = 50
 
-class GoveeShell:
-    """Interactive shell for the Govee ArtNet bridge using prompt_toolkit."""
+class ArtNetShell:
+    """Interactive shell for the ArtNet LAN bridge using prompt_toolkit."""
 
-    prompt = "govee> "
+    prompt = "artnet-bridge> "
 
     def __init__(self, config: ClientConfig):
         """
@@ -115,7 +115,7 @@ class GoveeShell:
         self.help_formatter = HelpFormatter(self)
 
         # Set up command history and data directory
-        self.data_dir = Path.home() / ".govee_artnet_console"
+        self.data_dir = Path.home() / ".artnet_lan_console"
         self.data_dir.mkdir(exist_ok=True)
         history_file = self.data_dir / "shell_history"
         self.bookmarks_file = self.data_dir / "bookmarks.json"
@@ -1398,7 +1398,7 @@ def run_shell(config: ClientConfig) -> None:
         config: Client configuration
     """
     try:
-        shell = GoveeShell(config)
+        shell = ArtNetShell(config)
         asyncio.run(shell.cmdloop())
     except KeyboardInterrupt:
         print("\nInterrupted. Goodbye!", file=sys.stderr)
