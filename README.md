@@ -205,13 +205,13 @@ aliases:
 
 ```
 ┌─────────────────────────┐
-│  dmx-lan-console     │  ← This package (CLI client)
+│  dmx-lan-console        │  ← This package (CLI client)
 │  (Interactive Shell)    │
 └────────────┬────────────┘
              │ HTTP/WebSocket
              │ (REST API)
 ┌────────────▼────────────┐
-│ artnet-lan-bridge       │  ← Bridge server (multi-protocol)
+│ dmx-lan-bridge          │  ← Bridge server (multi-protocol)
 │   (API Server)          │
 └────────────┬────────────┘
              │ Multi-Protocol Support

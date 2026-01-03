@@ -1,4 +1,4 @@
-"""Entry point for govee-artnet-console CLI."""
+"""Entry point for dmx-lan-console CLI."""
 
 from .cli import main
 

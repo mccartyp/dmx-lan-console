@@ -1,1 +1,1 @@
-"""Tests for govee-artnet-console."""
+"""Tests for dmx-lan-console."""
