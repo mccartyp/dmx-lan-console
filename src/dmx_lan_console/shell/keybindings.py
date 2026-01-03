@@ -1,4 +1,4 @@
-"""Key bindings configuration for the Govee ArtNet shell.
+"""Key bindings configuration for the DMX LAN Console shell.
 
 This module handles all keyboard shortcuts and key bindings for the
 interactive shell interface.

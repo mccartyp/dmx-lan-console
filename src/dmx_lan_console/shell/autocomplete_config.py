@@ -1,4 +1,4 @@
-"""Autocomplete configuration for the Govee ArtNet shell.
+"""Autocomplete configuration for the DMX LAN Console shell.
 
 This module defines the command structure for multi-level autocomplete
 in the interactive shell interface.

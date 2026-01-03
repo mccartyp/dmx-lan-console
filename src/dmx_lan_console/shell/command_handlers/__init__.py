@@ -1,4 +1,4 @@
-"""Command handlers for the Govee ArtNet shell.
+"""Command handlers for the DMX LAN Console shell.
 
 This package contains command handler classes that implement various
 shell commands organized by domain:

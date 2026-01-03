@@ -6,7 +6,7 @@ authors = ["mccartyp <mccartyp@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [{include = "dmx_lan_console", from = "src"}]
-repository = "https://github.com/mccartyp/govee-artnet-console"
+repository = "https://github.com/mccartyp/dmx-lan-console"
 keywords = ["artnet", "dmx", "lighting", "console", "cli", "govee", "lifx", "smart-home"]
 classifiers = [
     "Development Status :: 4 - Beta",

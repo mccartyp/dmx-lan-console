@@ -1,4 +1,4 @@
-"""UI layout builder for the Govee ArtNet shell.
+"""UI layout builder for the DMX LAN Console shell.
 
 This module handles the construction of the prompt_toolkit UI layout,
 including windows, containers, and the application instance.
