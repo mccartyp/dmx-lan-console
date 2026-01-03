@@ -171,7 +171,7 @@ jobs:
           # Check if package is still installed after apt-get install -f
           # apt-get may REMOVE the package if dependencies can't be satisfied!
           echo ""
-          if dpkg -l govee-artnet-console 2>/dev/null | grep -q '^ii'; then
+          if dpkg -l dmx-lan-console 2>/dev/null | grep -q '^ii'; then
             echo "✓ Package successfully installed and configured"
             echo "status=success" >> $GITHUB_OUTPUT
           else
@@ -217,16 +217,16 @@ jobs:
       run: |
         echo "=== Debugging installation status ==="
         echo "Checking if package is installed..."
-        dpkg -l | grep govee-artnet-console || echo "Package not found in dpkg"
+        dpkg -l | grep dmx-lan-console || echo "Package not found in dpkg"
         echo ""
         echo "Checking /usr/bin for binary..."
-        ls -la /usr/bin/govee-artnet-console || echo "Binary not found in /usr/bin"
+        ls -la /usr/bin/dmx-lan-console || echo "Binary not found in /usr/bin"
         echo ""
         echo "Checking PATH..."
         echo "PATH=$PATH"
         echo ""
         echo "Searching for binary..."
-        find /usr -name govee-artnet-console 2>/dev/null || echo "Binary not found anywhere in /usr"
+        find /usr -name dmx-lan-console 2>/dev/null || echo "Binary not found anywhere in /usr"
       shell: bash
 
     - name: Verify installation
@@ -239,7 +239,7 @@ jobs:
         echo ""
 
         # Check if package is actually installed
-        if dpkg -l govee-artnet-console 2>/dev/null | grep -q '^ii'; then
+        if dpkg -l dmx-lan-console 2>/dev/null | grep -q '^ii'; then
           echo "✓ Package found in dpkg"
         else
           echo "ERROR: Package not installed in dpkg"
@@ -247,21 +247,21 @@ jobs:
         fi
 
         # Check if binary exists
-        if which govee-artnet-console; then
+        if which dmx-lan-console; then
           echo "✓ Binary found in PATH"
         else
-          echo "ERROR: govee-artnet-console not found in PATH"
+          echo "ERROR: dmx-lan-console not found in PATH"
           exit 1
         fi
 
         echo ""
         # Try to run the command
-        if govee-artnet-console --version; then
-          echo "✓ govee-artnet-console --version succeeded"
-        elif govee-artnet-console --help | head -5; then
-          echo "✓ govee-artnet-console --help succeeded"
+        if dmx-lan-console --version; then
+          echo "✓ dmx-lan-console --version succeeded"
+        elif dmx-lan-console --help | head -5; then
+          echo "✓ dmx-lan-console --help succeeded"
         else
-          echo "ERROR: govee-artnet-console found but cannot execute"
+          echo "ERROR: dmx-lan-console found but cannot execute"
           exit 1
         fi
 
@@ -286,8 +286,8 @@ jobs:
       if: steps.pip_fallback.outputs.result != 'failed'
       run: |
         echo "=== Testing package removal ==="
-        if dpkg -l govee-artnet-console 2>/dev/null | grep -q '^ii'; then
-          ${{ matrix.use_sudo && 'sudo' || '' }} dpkg -r govee-artnet-console
+        if dpkg -l dmx-lan-console 2>/dev/null | grep -q '^ii'; then
+          ${{ matrix.use_sudo && 'sudo' || '' }} dpkg -r dmx-lan-console
           echo "✓ Package removed successfully"
         else
           echo "⚠ Package not installed, skipping uninstallation test"

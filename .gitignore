@@ -141,5 +141,5 @@ Thumbs.db
 
 # Project specific
 *.deb
-packaging/debian/govee-artnet-console/
+packaging/debian/dmx-lan-console/
 /tmp/

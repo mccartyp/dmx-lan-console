@@ -1,4 +1,4 @@
-"""Shell package for govee-artnet CLI.
+"""Shell package for dmx-lan CLI.
 
 This package contains the interactive shell and its components.
 """
