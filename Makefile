@@ -70,6 +70,10 @@ deb: clean
 	@echo " devices (Govee, LIFX, etc.) via the DMX LAN Bridge REST API. Features" >> $(DEB_PKG_DIR)/DEBIAN/control
 	@echo " include device management, DMX mapping, real-time monitoring, and log streaming." >> $(DEB_PKG_DIR)/DEBIAN/control
 
+	@# Copy maintainer scripts
+	@cp packaging/debian-scripts/postrm $(DEB_PKG_DIR)/DEBIAN/postrm
+	@chmod 755 $(DEB_PKG_DIR)/DEBIAN/postrm
+
 	@# Copy source files
 	@cp -r src/dmx_lan_console $(DEB_INSTALL_DIR)/lib/python3/dist-packages/
 
@@ -103,6 +107,7 @@ deb: clean
 	@find $(DEB_PKG_DIR) -type f -exec chmod 644 {} \;
 	@chmod 755 $(DEB_INSTALL_DIR)/bin/$(PACKAGE_NAME)
 	@chmod 755 $(DEB_PKG_DIR)/DEBIAN
+	@chmod 755 $(DEB_PKG_DIR)/DEBIAN/postrm
 
 	@# Build package
 	@mkdir -p $(DEB_OUTPUT_DIR)
