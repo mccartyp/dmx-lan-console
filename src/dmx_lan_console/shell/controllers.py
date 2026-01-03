@@ -599,12 +599,15 @@ class EventsController:
             return f"🔵 [cyan]*** Device Updated:[/] {device_id} - {fields_str}\n"
 
         elif event_type == "mapping_created":
-            mapping_id = data.get("mapping_id", "?")
-            universe = data.get("universe", "?")
-            channel = data.get("channel", "?")
-            device_id = data.get("device_id", "")
-            field = data.get("field")
-            fields = data.get("fields", [])
+            # Check if mapping details are nested in a 'mapping' object
+            mapping_obj = data.get("mapping", data)
+
+            mapping_id = mapping_obj.get("id", data.get("mapping_id", "?"))
+            universe = mapping_obj.get("universe", "?")
+            channel = mapping_obj.get("channel", "?")
+            device_id = mapping_obj.get("device_id", "")
+            field = mapping_obj.get("field")
+            fields = mapping_obj.get("fields", [])
 
             # Try to get device info from cache if device_id provided
             device_part = ""
@@ -775,11 +778,14 @@ class EventsController:
             return formatted
 
         elif event_type == "mapping_created":
-            mapping_id = data.get("mapping_id", "?")
-            universe = data.get("universe", "?")
-            channel = data.get("channel", "?")
-            field = data.get("field")
-            fields = data.get("fields", [])
+            # Check if mapping details are nested in a 'mapping' object
+            mapping_obj = data.get("mapping", data)
+
+            mapping_id = mapping_obj.get("id", data.get("mapping_id", "?"))
+            universe = mapping_obj.get("universe", "?")
+            channel = mapping_obj.get("channel", "?")
+            field = mapping_obj.get("field")
+            fields = mapping_obj.get("fields", [])
 
             formatted = f"{dim}[{time_str}]{reset} ⚙️  {blue}Mapping Created{reset}\n"
             formatted += f"{dim}  ╰─► {reset}ID: {mapping_id}\n"
