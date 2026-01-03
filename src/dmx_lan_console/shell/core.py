@@ -85,7 +85,7 @@ WS_RECV_TIMEOUT = 1.0
 DEFAULT_LOG_LINES = 50
 
 class ArtNetShell:
-    """Interactive shell for the ArtNet LAN bridge using prompt_toolkit."""
+    """Interactive shell for the DMX LAN Console using prompt_toolkit."""
 
     prompt = "dmx-bridge> "
 
@@ -1185,7 +1185,7 @@ class ArtNetShell:
         temp_console = Console(file=buffer, force_terminal=True, width=self.console.width, legacy_windows=False)
 
         temp_console.print()
-        temp_console.print(f"[bold cyan]Govee ArtNet Bridge Shell[/]")
+        temp_console.print(f"[bold cyan]DMX LAN Console[/]")
         temp_console.print(f"[dim]Version:[/] {SHELL_VERSION}")
         temp_console.print()
         temp_console.print("[dim]Features:[/]")
@@ -1351,7 +1351,7 @@ class ArtNetShell:
         # Show intro in output area
         if intro is None:
             self._append_output("[bold cyan]═" * 40 + "[/]\n")
-            self._append_output("[bold cyan]Govee ArtNet Bridge - Interactive Shell[/]\n")
+            self._append_output("[bold cyan]DMX LAN Console - Interactive Shell[/]\n")
             self._append_output("[bold cyan]═" * 40 + "[/]\n")
             self._append_output(f"[dim]Version {SHELL_VERSION}[/]\n\n")
             self._append_output("[cyan]Quick Tips:[/]\n")

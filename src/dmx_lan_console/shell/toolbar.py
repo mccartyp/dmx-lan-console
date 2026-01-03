@@ -1,4 +1,4 @@
-"""Toolbar management for the Govee ArtNet shell.
+"""Toolbar management for the DMX LAN Console shell.
 
 This module handles the bottom toolbar display, including status updates
 and formatting of the two-line toolbar with device counts and health info.

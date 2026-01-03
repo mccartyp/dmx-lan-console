@@ -463,7 +463,7 @@ class MonitoringCommandHandler(CommandHandler):
 
             # Create header
             self.shell._append_output("\n")
-            header_text = "─ ArtNet Bridge Dashboard "
+            header_text = "─ DMX LAN Console Dashboard "
             remaining = INNER_WIDTH - len(header_text)
             self.shell._append_output(f"[bold cyan]┌{header_text}{'─' * remaining}┐[/]\n")
 

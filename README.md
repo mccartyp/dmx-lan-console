@@ -1,9 +1,9 @@
 # DMX LAN Console
 
-[![Latest Release](https://img.shields.io/github/v/release/mccartyp/govee-artnet-console)](https://github.com/mccartyp/govee-artnet-console/releases/latest)
-[![Download DEB](https://img.shields.io/badge/download-.deb-blue)](https://github.com/mccartyp/govee-artnet-console/releases/latest)
+[![Latest Release](https://img.shields.io/github/v/release/mccartyp/dmx-lan-console)](https://github.com/mccartyp/dmx-lan-console/releases/latest)
+[![Download DEB](https://img.shields.io/badge/download-.deb-blue)](https://github.com/mccartyp/dmx-lan-console/releases/latest)
 [![Python Version](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads())
-[![License](https://img.shields.io/github/license/mccartyp/govee-artnet-console)](LICENSE)
+[![License](https://img.shields.io/github/license/mccartyp/dmx-lan-console)](LICENSE)
 
 Interactive CLI console for managing multi-protocol smart lighting devices (Govee, LIFX, etc.) via the [DMX LAN Bridge](https://github.com/mccartyp/govee-artnet-lan-bridge).
 
@@ -57,19 +57,19 @@ Interactive CLI console for managing multi-protocol smart lighting devices (Gove
 
 #### Option 1: Install from .deb Package (Recommended for Ubuntu/Debian)
 
-**Quick download:** Visit the [Latest Release](https://github.com/mccartyp/govee-artnet-console/releases/latest) page and download the `.deb` file.
+**Quick download:** Visit the [Latest Release](https://github.com/mccartyp/dmx-lan-console/releases/latest) page and download the `.deb` file.
 
 **Or use command line:**
 ```bash
 # Download the latest .deb package (check releases page for exact filename)
-wget $(curl -s https://api.github.com/repos/mccartyp/govee-artnet-console/releases/latest | grep "browser_download_url.*\.deb" | cut -d '"' -f 4)
+wget $(curl -s https://api.github.com/repos/mccartyp/dmx-lan-console/releases/latest | grep "browser_download_url.*\.deb" | cut -d '"' -f 4)
 
 # Install the downloaded package
-sudo dpkg -i govee-artnet-console_*.deb
+sudo dpkg -i dmx-lan-console_*.deb
 
 # If you see dependency errors, install Python packages via pip
 pip3 install httpx websockets pyyaml rich prompt-toolkit
-sudo dpkg -i --force-depends govee-artnet-console_*.deb
+sudo dpkg -i --force-depends dmx-lan-console_*.deb
 ```
 
 **Tested on:**
@@ -81,8 +81,8 @@ sudo dpkg -i --force-depends govee-artnet-console_*.deb
 
 ```bash
 # Clone the repository
-git clone https://github.com/mccartyp/govee-artnet-console.git
-cd govee-artnet-console
+git clone https://github.com/mccartyp/dmx-lan-console.git
+cd dmx-lan-console
 
 # Install
 pip install .

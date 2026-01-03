@@ -217,7 +217,7 @@ If `dmx-lan-console` is not found:
 
 3. **Run directly**:
    ```bash
-   python3 -m artnet_lan_console
+   python3 -m dmx_lan_console
    ```
 
 ### Import Errors
@@ -295,7 +295,7 @@ sudo apt-get remove dmx-lan-console
 
 ```bash
 sudo rm /usr/local/bin/dmx-lan-console
-sudo rm -rf /usr/local/lib/python3.*/site-packages/artnet_lan_console*
+sudo rm -rf /usr/local/lib/python3.*/site-packages/dmx_lan_console*
 ```
 
 ### Remove configuration

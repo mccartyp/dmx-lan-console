@@ -1,6 +1,6 @@
-# ArtNet LAN Console Guide
+# DMX LAN Console Guide
 
-The ArtNet LAN Console includes a powerful interactive shell mode that provides real-time monitoring, log viewing, and enhanced usability features for managing your multi-protocol smart lighting devices via the DMX LAN Bridge.
+The DMX LAN Console includes a powerful interactive shell mode that provides real-time monitoring, log viewing, and enhanced usability features for managing your multi-protocol smart lighting devices via the DMX LAN Bridge.
 
 ## Table of Contents
 
